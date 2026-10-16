@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki-stack
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/foreground
+spec:
+  project: default
+  sources:
+    - repoURL: 'https://grafana.github.io/helm-charts'
+      chart: loki-stack
+      targetRevision: '2.10.2' # pin to a specific version; check https://github.com/grafana/helm-charts/releases
+      helm:
+        valueFiles:
+          - $values/services/monitoring/loki-stack-values.yaml
+    - repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false

@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: devops-infra
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - env: dev
+          - env: prod
+  template:
+    metadata:
+      name: 'devops-infra-{{env}}'
+    spec:
+      project: crossplane
+      source:
+        repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
+        targetRevision: HEAD
+        path: 'apps/{{env}}/devops'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: crossplane-system
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=false

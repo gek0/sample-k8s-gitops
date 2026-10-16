@@ -1,0 +1,10 @@
+promtail:
+  enabled: true
+
+loki:
+  persistence:
+    enabled: true
+    storageClassName: local-path
+    accessModes:
+      - ReadWriteOnce
+    size: 2Gi
