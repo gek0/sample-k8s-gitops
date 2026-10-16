@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: devops-infra
+  name: devops-aws-sample-infra
   namespace: argocd
 spec:
   generators:
@@ -11,13 +11,13 @@ spec:
           - env: prod
   template:
     metadata:
-      name: 'devops-infra-{{env}}'
+      name: 'devops-aws-sample-infra-{{env}}'
     spec:
       project: github-personal
       source:
         repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
         targetRevision: HEAD
-        path: 'apps/{{env}}/devops'
+        path: 'components/{{env}}/devops-aws-sample-infra'
       destination:
         server: 'https://kubernetes.default.svc'
         namespace: github-personal-devops-infra

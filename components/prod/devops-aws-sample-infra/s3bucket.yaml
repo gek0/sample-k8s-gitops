@@ -1,7 +1,7 @@
 apiVersion: s3.aws.upbound.io/v1beta1
 kind: Bucket
 metadata:
-  name: prod-sample-app-bucket
+  name: prod-s3-devops-aws-sample-infra
 spec:
   forProvider:
     region: us-east-2
