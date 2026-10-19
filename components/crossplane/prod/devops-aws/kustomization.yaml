@@ -9,9 +9,6 @@ resources:
 patches:
   - target:
       kind: Bucket
-    path: account-patch.yaml
-  - target:
-      kind: Bucket
     patch: |-
       - op: add
         path: /spec/forProvider/region
@@ -22,3 +19,6 @@ patches:
           Environment: prod
           Team: devops
           ManagedBy: crossplane
+  - target:
+      kind: Bucket
+    path: account-patch.yaml
