@@ -13,9 +13,7 @@ server:
       metallb.universe.tf/loadBalancerIPs: "192.168.104.53"
     active:
       enabled: true
-      annotations:
-        metallb.universe.tf/loadBalancerIPs: "192.168.104.56"
     standby:
       enabled: true
       annotations:
-        metallb.universe.tf/loadBalancerIPs: "192.168.104.57"
+        metallb.universe.tf/loadBalancerIPs: "192.168.104.56"
