@@ -9,9 +9,9 @@ server:
     size: 1Gi
   service:
     type: LoadBalancer
-    annotations:
-      metallb.universe.tf/loadBalancerIPs: "192.168.104.53"
     active:
       enabled: true
+      annotations:
+        metallb.universe.tf/loadBalancerIPs: "192.168.104.53"
     standby:
       enabled: false
