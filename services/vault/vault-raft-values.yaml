@@ -10,10 +10,10 @@ server:
   service:
     enabled: true
     type: ClusterIP # default for all services
-  # vault-active service configuration
-  activeService:
-    enabled: true
-    type: LoadBalancer
-    annotations:
-      metallb.universe.tf/address-pool: "192.168.104.53"
-    port: 8200
+    active:
+      enabled: true
+      type: LoadBalancer
+      annotations:
+        metallb.universe.tf/address-pool: "192.168.104.53"
+    standby:
+      enabled: true
