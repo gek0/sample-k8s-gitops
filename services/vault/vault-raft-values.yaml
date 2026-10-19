@@ -9,15 +9,11 @@ server:
     size: 1Gi
   service:
     enabled: true
-    type: ClusterIP
-    standby:
-      enabled: false
-  extraServices:
-    - name: vault-active
-      type: LoadBalancer
-      annotations:
-        metallb.universe.tf/address-pool: "192.168.104.53"
-      ports:
-        - name: http
-          port: 8200
-          targetPort: 8200
+    type: ClusterIP # default for all services
+  # vault-active service configuration
+  activeService:
+    enabled: true
+    type: LoadBalancer
+    annotations:
+      metallb.universe.tf/address-pool: "192.168.104.53"
+    port: 8200
