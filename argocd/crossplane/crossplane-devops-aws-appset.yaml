@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: devops-aws-sample-infra
+  name: crossplane-devops-aws
   namespace: argocd
 spec:
   generators:
@@ -11,16 +11,16 @@ spec:
           - env: prod
   template:
     metadata:
-      name: 'devops-aws-sample-infra-{{env}}'
+      name: 'crossplane-devops-aws-{{env}}'
     spec:
       project: github-personal
       source:
         repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
         targetRevision: HEAD
-        path: 'components/{{env}}/devops-aws-sample-infra'
+        path: 'components/crossplane/{{env}}/devops-aws'
       destination:
         server: 'https://kubernetes.default.svc'
-        namespace: github-personal-devops-infra
+        namespace: github-personal-crossplane-devops-aws
       syncPolicy:
         automated:
           prune: true

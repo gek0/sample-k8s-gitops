@@ -1,10 +1,9 @@
 apiVersion: s3.aws.upbound.io/v1beta1
 kind: Bucket
 metadata:
-  name: dev-s3-devops-aws-sample-infra
+  name: devops-aws
 spec:
   forProvider:
-    region: us-east-1
     acl: private
   providerConfigRef:
-    name: default
+    name: devops-aws

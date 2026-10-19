@@ -1,0 +1,11 @@
+apiVersion: aws.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: devops-aws
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: github-personal-crossplane-devops-aws
+      name: crossplane-creds-devops-aws
+      key: credentials
