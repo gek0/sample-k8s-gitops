@@ -48,7 +48,9 @@ The root app in `sample-k8s-argocd-bootstrap` watches `argocd/` recursively. Any
 | Service | Address | Notes |
 |---|---|---|
 | Grafana | http://192.168.104.54 | admin / admin — Prometheus & Loki datasources pre-configured |
-| Vault | http://192.168.104.53:8200 | HA Raft — must run `k8s/scripts/vault-post-install.sh` once after first sync to init and unseal |
+| Vault | http://192.168.104.53:8200 | HA Raft (round-robin) — must run `k8s/scripts/vault-post-install.sh` once after first sync to init and unseal |
+| Vault active | http://192.168.104.56:8200 | Always routes to the active Vault node |
+| Vault standby | http://192.168.104.57:8200 | Always routes to standby Vault nodes |
 | Vault webapp | http://192.168.104.55 | Demo app reading secrets from Vault (ns: `github-personal-vault-webapp`) — source in `demos/vault-webapp/` |
 
 Prometheus and Alertmanager are ClusterIP only — accessible via Grafana or `kubectl port-forward`.

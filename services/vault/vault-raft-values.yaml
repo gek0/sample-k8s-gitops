@@ -8,12 +8,14 @@ server:
     storageClass: local-path
     size: 1Gi
   service:
-    enabled: true
-    type: ClusterIP # default for all services
+    type: LoadBalancer
+    annotations:
+      metallb.universe.tf/loadBalancerIPs: "192.168.104.53"
     active:
       enabled: true
-      type: LoadBalancer
       annotations:
-        metallb.universe.tf/address-pool: "192.168.104.53"
+        metallb.universe.tf/loadBalancerIPs: "192.168.104.56"
     standby:
       enabled: true
+      annotations:
+        metallb.universe.tf/loadBalancerIPs: "192.168.104.57"
