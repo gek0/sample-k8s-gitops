@@ -8,10 +8,16 @@ server:
     storageClass: local-path
     size: 1Gi
   service:
+    enabled: true
     type: ClusterIP
-    active:
-      enabled: true
-      annotations:
-        metallb.universe.tf/loadBalancerIPs: "192.168.104.53"
     standby:
       enabled: false
+  extraServices:
+    - name: vault-active
+      type: LoadBalancer
+      annotations:
+        metallb.universe.tf/address-pool: "192.168.104.53"
+      ports:
+        - name: http
+          port: 8200
+          targetPort: 8200
