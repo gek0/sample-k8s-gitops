@@ -28,7 +28,7 @@ The root app in `sample-k8s-argocd-bootstrap` watches `argocd/` recursively. Any
 
 | Project | Allowed namespaces | Used by |
 |---|---|---|
-| `cluster-ops` | all (`*`) | monitoring stack, vault, root app |
+| `cluster-ops` | all (`*`) | monitoring stack, vault, external-secrets, root app |
 | `github-personal` | `github-personal-*` | devops-infra appset, nginx app, vault-webapp |
 
 ## Adding a new service
@@ -52,3 +52,5 @@ The root app in `sample-k8s-argocd-bootstrap` watches `argocd/` recursively. Any
 | Vault webapp | http://192.168.104.55 | Demo app reading secrets from Vault (ns: `github-personal-vault-webapp`) — source in `demos/vault-webapp/` |
 
 Prometheus and Alertmanager are ClusterIP only — accessible via Grafana or `kubectl port-forward`.
+
+External Secrets Operator has no external endpoint — it runs as an in-cluster operator. The `vault-cluster-store` ClusterSecretStore connects to Vault via Kubernetes auth. Use `ExternalSecret` CRs in any namespace to sync secrets from Vault into Kubernetes Secrets. For AWS, add a second ClusterSecretStore with an AWS provider block — no additional operator needed.
