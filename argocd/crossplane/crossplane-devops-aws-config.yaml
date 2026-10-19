@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: crossplane-devops-aws
+  name: crossplane-devops-aws-config
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io/foreground
