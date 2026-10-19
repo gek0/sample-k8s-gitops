@@ -38,7 +38,7 @@ The root app in `sample-k8s-argocd-bootstrap` watches `argocd/` recursively. Any
 2. Add `argocd/<service>/<service>.yaml` — an Application CR using multi-source (Helm chart + `$values` ref)
 3. Push — ArgoCD picks it up automatically
 
-**Environment-scoped workloads** (e.g. Crossplane resources per env):
+**Environment-scoped workloads** (e.g. Crossplane resources per env, managed via Kustomize overlays):
 1. Add manifests under `apps/{env}/{project}/`
 2. Add or update an ApplicationSet in `argocd/{project}/` that generates one Application per env with `path: apps/{{env}}/{project}`
 3. Push — ApplicationSet creates the child Applications automatically

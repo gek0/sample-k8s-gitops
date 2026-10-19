@@ -1,8 +1,0 @@
-apiVersion: pkg.crossplane.io/v1
-kind: Provider
-metadata:
-  name: upbound-provider-aws-s3
-  annotations:
-    argocd.argoproj.io/sync-wave: "0"
-spec:
-  package: xpkg.upbound.io/upbound/provider-aws-s3:v2.9.1 # check https://marketplace.upbound.io/providers/upbound/provider-aws-s3
