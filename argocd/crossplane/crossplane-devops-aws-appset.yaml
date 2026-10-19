@@ -11,13 +11,10 @@ spec:
         elements:
           - env: dev
             chart: s3-bucket
-            valuesFile: s3-bucket-dev-values.yaml
           - env: prod
             chart: s3-bucket
-            valuesFile: s3-bucket-prod-values.yaml
           - env: dev
             chart: vpc
-            valuesFile: vpc-dev-values.yaml
   template:
     metadata:
       name: 'crossplane-devops-aws-{{chart}}-{{env}}'
@@ -29,7 +26,7 @@ spec:
           path: 'charts/crossplane/aws/{{chart}}'
           helm:
             valueFiles:
-              - $values/services/crossplane/{{valuesFile}}
+              - $values/services/crossplane/aws/devops/{{env}}/{{chart}}-values.yaml
         - repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
           targetRevision: HEAD
           ref: values
