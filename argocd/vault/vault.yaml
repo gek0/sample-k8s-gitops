@@ -17,6 +17,9 @@ spec:
     - repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
       targetRevision: HEAD
       ref: values
+    - repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
+      targetRevision: HEAD
+      path: services/vault/base
   destination:
     server: https://kubernetes.default.svc
     namespace: vault
@@ -25,4 +28,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=false
+      - CreateNamespace=true
