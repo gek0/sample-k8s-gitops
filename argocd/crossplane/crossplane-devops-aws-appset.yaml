@@ -3,6 +3,8 @@ kind: ApplicationSet
 metadata:
   name: crossplane-devops-aws
   namespace: argocd
+  labels:
+    tier: infra
 spec:
   generators:
     - list:

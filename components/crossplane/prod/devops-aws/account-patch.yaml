@@ -1,8 +1,0 @@
-# Set your AWS account ID here. Used in the S3 bucket name and tags.
-- op: add
-  path: /metadata/annotations
-  value:
-    crossplane.io/external-name: prod-devops-aws-us-east-2-173381260310
-- op: add
-  path: /spec/forProvider/tags/AccountId
-  value: "173381260310"

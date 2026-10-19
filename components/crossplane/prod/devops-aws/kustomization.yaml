@@ -11,6 +11,10 @@ patches:
       kind: Bucket
     patch: |-
       - op: add
+        path: /metadata/annotations
+        value:
+          crossplane.io/external-name: prod-devops-aws-us-east-2-173381260310
+      - op: add
         path: /spec/forProvider/region
         value: us-east-2
       - op: add
@@ -19,6 +23,4 @@ patches:
           Environment: prod
           Team: devops
           ManagedBy: crossplane
-  - target:
-      kind: Bucket
-    path: account-patch.yaml
+          AccountId: "173381260310"
