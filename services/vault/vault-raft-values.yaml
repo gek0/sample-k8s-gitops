@@ -11,7 +11,5 @@ server:
     type: LoadBalancer
     active:
       enabled: true
-      annotations:
-        metallb.universe.tf/loadBalancerIPs: "192.168.104.53"
     standby:
-      enabled: false
+      enabled: true
