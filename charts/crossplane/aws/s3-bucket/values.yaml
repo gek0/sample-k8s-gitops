@@ -1,9 +1,18 @@
+# -- Deploy this chart. Set to false to skip all resources without removing the ArgoCD Application.
+enabled: true
+
+# -- Environment name (dev, prod). Used in resource names and tags.
 env: ""
+# -- AWS region where the bucket is created.
 region: ""
+# -- AWS account ID. Used in the S3 bucket name and tags.
 accountId: ""
+# -- Bucket name prefix. Combined with env, region and accountId: `{env}-{bucketPrefix}-{region}-{accountId}`.
 bucketPrefix: ""
+# -- Name of the Crossplane ProviderConfig to use for AWS authentication.
 providerConfig: devops-aws
 
+# -- AWS resource tags applied to the bucket and all sub-resources.
 tags:
   Team: devops
   ManagedBy: crossplane

@@ -1,3 +1,4 @@
+{{- if .Values.enabled }}
 apiVersion: ec2.aws.upbound.io/v1beta1
 kind: VPC
 metadata:
@@ -15,3 +16,4 @@ spec:
       {{- end }}
   providerConfigRef:
     name: {{ .Values.providerConfig }}
+{{- end }}

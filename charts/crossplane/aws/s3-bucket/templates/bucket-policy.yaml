@@ -1,3 +1,4 @@
+{{- if .Values.enabled }}
 apiVersion: s3.aws.upbound.io/v1beta1
 kind: BucketPolicy
 metadata:
@@ -51,3 +52,4 @@ spec:
       }
   providerConfigRef:
     name: {{ .Values.providerConfig }}
+{{- end }}
