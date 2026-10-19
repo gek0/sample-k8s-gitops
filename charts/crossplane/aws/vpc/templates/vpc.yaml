@@ -1,0 +1,17 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: VPC
+metadata:
+  name: {{ include "vpc.name" . }}
+spec:
+  forProvider:
+    region: {{ .Values.region }}
+    cidrBlock: {{ .Values.cidrBlock }}
+    enableDnsHostnames: true
+    enableDnsSupport: true
+    tags:
+      Name: {{ include "vpc.name" . }}
+      {{- range $k, $v := .Values.tags }}
+      {{ $k }}: {{ $v | quote }}
+      {{- end }}
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}

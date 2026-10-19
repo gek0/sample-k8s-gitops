@@ -1,0 +1,75 @@
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: Bucket
+metadata:
+  name: {{ include "s3-bucket.name" . }}
+  annotations:
+    crossplane.io/external-name: {{ include "s3-bucket.externalName" . }}
+spec:
+  forProvider:
+    region: {{ .Values.region }}
+    tags:
+      {{- range $k, $v := .Values.tags }}
+      {{ $k }}: {{ $v | quote }}
+      {{- end }}
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}
+---
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: BucketVersioning
+metadata:
+  name: {{ include "s3-bucket.name" . }}
+spec:
+  forProvider:
+    region: {{ .Values.region }}
+    bucketRef:
+      name: {{ include "s3-bucket.name" . }}
+    versioningConfiguration:
+      - status: Enabled
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}
+---
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: BucketOwnershipControls
+metadata:
+  name: {{ include "s3-bucket.name" . }}
+spec:
+  forProvider:
+    region: {{ .Values.region }}
+    bucketRef:
+      name: {{ include "s3-bucket.name" . }}
+    rule:
+      - objectOwnership: BucketOwnerEnforced
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}
+---
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: BucketPublicAccessBlock
+metadata:
+  name: {{ include "s3-bucket.name" . }}
+spec:
+  forProvider:
+    region: {{ .Values.region }}
+    bucketRef:
+      name: {{ include "s3-bucket.name" . }}
+    blockPublicAcls: true
+    blockPublicPolicy: true
+    ignorePublicAcls: true
+    restrictPublicBuckets: true
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}
+---
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: BucketServerSideEncryptionConfiguration
+metadata:
+  name: {{ include "s3-bucket.name" . }}
+spec:
+  forProvider:
+    region: {{ .Values.region }}
+    bucketRef:
+      name: {{ include "s3-bucket.name" . }}
+    rule:
+      - applyServerSideEncryptionByDefault:
+          - sseAlgorithm: aws:kms
+        bucketKeyEnabled: true
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}

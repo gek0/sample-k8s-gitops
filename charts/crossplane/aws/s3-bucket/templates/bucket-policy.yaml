@@ -1,0 +1,53 @@
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: BucketPolicy
+metadata:
+  name: {{ include "s3-bucket.name" . }}
+spec:
+  forProvider:
+    region: {{ .Values.region }}
+    bucketRef:
+      name: {{ include "s3-bucket.name" . }}
+    policy: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "DenyNonTLS",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+              "{{ include "s3-bucket.arn" . }}",
+              "{{ include "s3-bucket.arn" . }}/*"
+            ],
+            "Condition": {
+              "Bool": { "aws:SecureTransport": "false" }
+            }
+          },
+          {
+            "Sid": "DenyOldTLS",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+              "{{ include "s3-bucket.arn" . }}",
+              "{{ include "s3-bucket.arn" . }}/*"
+            ],
+            "Condition": {
+              "NumericLessThan": { "s3:TlsVersion": "1.3" }
+            }
+          },
+          {
+            "Sid": "DenyNonKMSUploads",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:PutObject",
+            "Resource": "{{ include "s3-bucket.arn" . }}/*",
+            "Condition": {
+              "StringNotEquals": { "s3:x-amz-server-side-encryption": "aws:kms" }
+            }
+          }
+        ]
+      }
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}

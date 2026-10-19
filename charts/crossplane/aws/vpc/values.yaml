@@ -1,0 +1,13 @@
+env: ""
+region: ""
+accountId: ""
+vpcPrefix: ""
+cidrBlock: ""
+providerConfig: devops-aws
+
+tags:
+  Team: devops
+  ManagedBy: crossplane
+
+publicSubnets: []
+privateSubnets: []

@@ -1,0 +1,18 @@
+apiVersion: v2
+name: s3-bucket
+description: AWS S3 bucket with security hardening (Crossplane Helm chart)
+type: application
+version: 1.0.0
+
+maintainers:
+  - name: Matija Burisa
+    url: https://github.com/gek0
+
+sources:
+  - https://github.com/gek0/sample-k8s-gitops
+
+keywords:
+  - s3
+  - aws
+  - crossplane
+  - storage

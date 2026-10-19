@@ -1,0 +1,18 @@
+apiVersion: v2
+name: vpc
+description: AWS VPC (Crossplane Helm chart)
+type: application
+version: 1.0.0
+
+maintainers:
+  - name: Matija Burisa
+    url: https://github.com/gek0
+
+sources:
+  - https://github.com/gek0/sample-k8s-gitops
+
+keywords:
+  - vpc
+  - aws
+  - crossplane
+  - networking

@@ -1,0 +1,9 @@
+env: ""
+region: ""
+accountId: ""
+bucketPrefix: ""
+providerConfig: devops-aws
+
+tags:
+  Team: devops
+  ManagedBy: crossplane

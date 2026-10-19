@@ -1,0 +1,11 @@
+env: dev
+region: us-east-1
+accountId: "173381260310"
+bucketPrefix: devops-aws
+providerConfig: devops-aws
+
+tags:
+  Environment: dev
+  Team: devops
+  ManagedBy: crossplane
+  AccountId: "173381260310"

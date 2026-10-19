@@ -15,3 +15,12 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   package: xpkg.upbound.io/upbound/provider-aws-s3:v2.9.1 # check https://marketplace.upbound.io/providers/upbound/provider-aws-s3
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: upbound-provider-aws-ec2
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  package: xpkg.upbound.io/upbound/provider-aws-ec2:v2.9.1 # check https://marketplace.upbound.io/providers/upbound/provider-aws-ec2

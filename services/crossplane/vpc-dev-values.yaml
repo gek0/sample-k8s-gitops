@@ -1,0 +1,28 @@
+env: dev
+region: us-east-1
+accountId: "173381260310"
+vpcPrefix: devops-aws
+cidrBlock: "10.0.0.0/16"
+providerConfig: devops-aws
+
+tags:
+  Environment: dev
+  Team: devops
+  ManagedBy: crossplane
+  AccountId: "173381260310"
+
+publicSubnets:
+  - name: public-a
+    cidrBlock: "10.0.1.0/24"
+    availabilityZone: "us-east-1a"
+  - name: public-b
+    cidrBlock: "10.0.2.0/24"
+    availabilityZone: "us-east-1b"
+
+privateSubnets:
+  - name: private-a
+    cidrBlock: "10.0.10.0/24"
+    availabilityZone: "us-east-1a"
+  - name: private-b
+    cidrBlock: "10.0.20.0/24"
+    availabilityZone: "us-east-1b"

@@ -1,0 +1,46 @@
+{{- range .Values.publicSubnets }}
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  name: {{ include "vpc.subnetName" (dict "root" $ "subnet" .) }}
+spec:
+  forProvider:
+    region: {{ $.Values.region }}
+    availabilityZone: {{ .availabilityZone }}
+    cidrBlock: {{ .cidrBlock }}
+    mapPublicIpOnLaunch: true
+    vpcIdRef:
+      name: {{ include "vpc.name" $ }}
+    tags:
+      Name: {{ include "vpc.subnetName" (dict "root" $ "subnet" .) }}
+      SubnetType: public
+      {{- range $k, $v := $.Values.tags }}
+      {{ $k }}: {{ $v | quote }}
+      {{- end }}
+  providerConfigRef:
+    name: {{ $.Values.providerConfig }}
+{{- end }}
+{{- range .Values.privateSubnets }}
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  name: {{ include "vpc.subnetName" (dict "root" $ "subnet" .) }}
+spec:
+  forProvider:
+    region: {{ $.Values.region }}
+    availabilityZone: {{ .availabilityZone }}
+    cidrBlock: {{ .cidrBlock }}
+    mapPublicIpOnLaunch: false
+    vpcIdRef:
+      name: {{ include "vpc.name" $ }}
+    tags:
+      Name: {{ include "vpc.subnetName" (dict "root" $ "subnet" .) }}
+      SubnetType: private
+      {{- range $k, $v := $.Values.tags }}
+      {{ $k }}: {{ $v | quote }}
+      {{- end }}
+  providerConfigRef:
+    name: {{ $.Values.providerConfig }}
+{{- end }}

@@ -1,0 +1,11 @@
+env: prod
+region: us-east-2
+accountId: "173381260310"
+bucketPrefix: devops-aws
+providerConfig: devops-aws
+
+tags:
+  Environment: prod
+  Team: devops
+  ManagedBy: crossplane
+  AccountId: "173381260310"

@@ -10,16 +10,29 @@ spec:
     - list:
         elements:
           - env: dev
+            chart: s3-bucket
+            valuesFile: s3-bucket-dev-values.yaml
           - env: prod
+            chart: s3-bucket
+            valuesFile: s3-bucket-prod-values.yaml
+          - env: dev
+            chart: vpc
+            valuesFile: vpc-dev-values.yaml
   template:
     metadata:
-      name: 'crossplane-devops-aws-{{env}}'
+      name: 'crossplane-devops-aws-{{chart}}-{{env}}'
     spec:
       project: github-personal
-      source:
-        repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
-        targetRevision: HEAD
-        path: 'components/crossplane/{{env}}/devops-aws'
+      sources:
+        - repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
+          targetRevision: HEAD
+          path: 'charts/crossplane/aws/{{chart}}'
+          helm:
+            valueFiles:
+              - $values/services/crossplane/{{valuesFile}}
+        - repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
+          targetRevision: HEAD
+          ref: values
       destination:
         server: 'https://kubernetes.default.svc'
         namespace: github-personal-crossplane-devops-aws
