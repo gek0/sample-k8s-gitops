@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vault-unsealed-check
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  activeDeadlineSeconds: 3600
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: wait
+          image: curlimages/curl:latest
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for Vault to be active and unsealed..."
+              until [ "$(curl -s -o /dev/null -w '%{http_code}' http://vault-active.vault.svc.cluster.local:8200/v1/sys/health)" = "200" ]
+              do
+                echo "Vault not ready yet — retrying in 15s..."
+                sleep 15
+              done
+              echo "Vault is active and unsealed — proceeding with sync"
