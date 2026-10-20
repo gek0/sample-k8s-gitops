@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
   labels:
     tier: infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   generators:
     - list:
@@ -34,5 +36,8 @@ spec:
         server: 'https://kubernetes.default.svc'
         namespace: github-personal-crossplane-devops-aws
       syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
         syncOptions:
           - CreateNamespace=false

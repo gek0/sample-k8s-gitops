@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kube-prometheus-stack
+  name: monitoring-stack
   namespace: argocd
   labels:
     tier: infra
@@ -12,11 +12,23 @@ spec:
   sources:
     - repoURL: 'https://prometheus-community.github.io/helm-charts'
       chart: kube-prometheus-stack
-      targetRevision: '65.1.1' # pin to a specific version; check https://github.com/prometheus-community/helm-charts/releases
+      targetRevision: '92.10.1' # check https://github.com/prometheus-community/helm-charts/releases
       helm:
         valueFiles:
           - $values/services/monitoring/kube-prometheus-stack-values.yaml
         skipCrds: false
+    - repoURL: 'https://grafana.github.io/helm-charts'
+      chart: loki
+      targetRevision: '7.3.0' # check https://artifacthub.io/packages/helm/grafana/loki
+      helm:
+        valueFiles:
+          - $values/services/monitoring/loki-values.yaml
+    - repoURL: 'https://grafana.github.io/helm-charts'
+      chart: promtail
+      targetRevision: '6.17.1' # check https://artifacthub.io/packages/helm/grafana/promtail
+      helm:
+        valueFiles:
+          - $values/services/monitoring/promtail-values.yaml
     - repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
       targetRevision: HEAD
       ref: values
@@ -28,5 +40,5 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=false
-      - ServerSideApply=true # required for kube-prometheus-stack CRDs
+      - CreateNamespace=true
+      - ServerSideApply=true

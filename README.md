@@ -24,11 +24,22 @@ The root app in `sample-k8s-argocd-bootstrap` watches `argocd/` recursively. Any
 
 `*-values.yaml` files are excluded from the root app's directory scan (they are not Kubernetes resources) and are referenced directly by the Helm-based Application CRs via the `$values` multi-source pattern.
 
+## Sync wave ordering
+
+Applications use `argocd.argoproj.io/sync-wave` annotations to control deployment order. The root app waits for all resources in a wave to be Healthy before moving to the next.
+
+| Wave | Applications | Why |
+|---|---|---|
+| 0 | `vault`, `external-secrets`, `crossplane`, `monitoring-stack`, `keycloak`, all others (default) | Core infra — no dependencies |
+| 1 | `crossplane-providers`, `eso-vault-store` | Need Crossplane CRDs (wave 0) and Vault healthy (wave 0) |
+| 2 | `crossplane-devops-aws-config`, `monitoring-base`, `argocd-keycloak-oidc`, `vault-webapp`, `nginx-hpa` | Need ClusterSecretStore (wave 1) to sync credentials |
+| 3 | `crossplane-devops-aws` (AppSet) | ProviderConfig + credentials must be healthy (wave 2) before AWS resources deploy |
+
 ## ArgoCD projects
 
 | Project | Allowed namespaces | Used by |
 |---|---|---|
-| `cluster-ops` | all (`*`) | monitoring stack, vault, external-secrets, root app |
+| `cluster-ops` | all (`*`) | monitoring-stack, logging-stack, keycloak, vault, external-secrets, crossplane, argocd OIDC, root app |
 | `github-personal` | `github-personal-*` | devops-infra appset, nginx app, vault-webapp |
 
 ## Adding a new service
@@ -47,12 +58,14 @@ The root app in `sample-k8s-argocd-bootstrap` watches `argocd/` recursively. Any
 
 | Service | Address | Notes |
 |---|---|---|
-| Grafana | dynamic MetalLB IP, port 80 | admin / admin — Prometheus & Loki datasources pre-configured |
+| Keycloak | dynamic MetalLB IP + `keycloak.local.io` (Istio) | OIDC provider — run `k8s/scripts/keycloak-post-install.sh` once after first sync |
+| Grafana | dynamic MetalLB IP, port 80 | Login via Keycloak — Prometheus & Loki datasources pre-configured |
 | Vault | dynamic MetalLB IP, port 8200 | HA Raft (round-robin) — must run `k8s/scripts/vault-post-install.sh` once after first sync to init and unseal |
 | Vault active | dynamic MetalLB IP, port 8200 | Always routes to the active Vault node |
 | Vault standby | dynamic MetalLB IP, port 8200 | Always routes to standby Vault nodes |
 | Vault webapp | dynamic MetalLB IP, port 80 | Demo app reading secrets from Vault (ns: `github-personal-vault-webapp`) — source in `demos/vault-webapp/` |
 
-Prometheus and Alertmanager are ClusterIP only — accessible via Grafana or `kubectl port-forward`.
+Prometheus (port 9090) and Alertmanager (port 9093) are also exposed via MetalLB LoadBalancer.
+Loki has no UI — query logs through the Grafana Loki datasource.
 
 External Secrets Operator has no external endpoint — it runs as an in-cluster operator. The `vault-cluster-store` ClusterSecretStore connects to Vault via Kubernetes auth. Use `ExternalSecret` CRs in any namespace to sync secrets from Vault into Kubernetes Secrets. For AWS, add a second ClusterSecretStore with an AWS provider block — no additional operator needed.

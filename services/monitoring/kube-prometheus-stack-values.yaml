@@ -4,8 +4,24 @@ grafana:
   service:
     type: LoadBalancer
 
-  admin:
-    existingSecret: monitoring-grafana
+  envFromSecret: grafana-keycloak-secret
+
+  grafana.ini:
+    server:
+      root_url: "http://grafana.local.io"
+    auth:
+      disable_login_form: false # keep login form as admin fallback
+    auth.generic_oauth:
+      enabled: true
+      name: Keycloak
+      allow_sign_up: true
+      client_id: grafana
+      client_secret: $__env{GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET}
+      scopes: openid email profile roles
+      auth_url: http://keycloak.local.io/realms/master/protocol/openid-connect/auth
+      token_url: http://keycloak.keycloak.svc.cluster.local/realms/master/protocol/openid-connect/token
+      api_url: http://keycloak.keycloak.svc.cluster.local/realms/master/protocol/openid-connect/userinfo
+      role_attribute_path: "contains(roles[*], 'Admin') && 'Admin' || 'Viewer'"
 
   defaultDashboardsEnabled: true
 
@@ -21,7 +37,7 @@ grafana:
         - name: Loki
           type: loki
           access: proxy
-          url: http://loki.monitoring.svc.cluster.local:3100
+          url: http://loki-single-binary.monitoring.svc.cluster.local:3100
           isDefault: false
           jsonData:
             healthCheckEnabled: false
@@ -40,7 +56,13 @@ grafana:
     datasources:
       enabled: false
 
+alertmanager:
+  service:
+    type: LoadBalancer
+
 prometheus:
+  service:
+    type: LoadBalancer
   prometheusSpec:
     storageSpec:
       volumeClaimTemplate:

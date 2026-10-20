@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: keycloak-virtualservice
+  namespace: keycloak
+spec:
+  hosts:
+    - "keycloak.local.io"
+  gateways:
+    - istio-system/primary-gateway
+  http:
+    - route:
+        - destination:
+            host: keycloak.keycloak.svc.cluster.local
+            port:
+              number: 80

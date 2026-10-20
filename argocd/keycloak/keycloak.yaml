@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: loki-stack
+  name: keycloak
   namespace: argocd
   labels:
     tier: infra
@@ -10,21 +10,24 @@ metadata:
 spec:
   project: cluster-ops
   sources:
-    - repoURL: 'https://grafana.github.io/helm-charts'
-      chart: loki-stack
-      targetRevision: '2.10.2' # pin to a specific version; check https://github.com/grafana/helm-charts/releases
+    - repoURL: 'https://charts.bitnami.com/bitnami'
+      chart: keycloak
+      targetRevision: '25.3.2' # check https://github.com/bitnami/charts/tree/main/bitnami/keycloak
       helm:
         valueFiles:
-          - $values/services/monitoring/loki-stack-values.yaml
+          - $values/services/keycloak/values.yaml
     - repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
       targetRevision: HEAD
       ref: values
+    - repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
+      targetRevision: HEAD
+      path: services/keycloak/base
   destination:
     server: https://kubernetes.default.svc
-    namespace: monitoring
+    namespace: keycloak
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=false
+      - CreateNamespace=true
