@@ -30,8 +30,9 @@ Applications use `argocd.argoproj.io/sync-wave` annotations to control deploymen
 
 | Wave | Applications | Why |
 |---|---|---|
-| 0 | `vault`, `external-secrets`, `crossplane`, `monitoring-stack`, `keycloak`, all others (default) | Core infra — no dependencies |
-| 1 | `crossplane-providers`, `eso-vault-store` | Need Crossplane CRDs (wave 0) and Vault healthy (wave 0) |
+| -1 | `vault` | Deploys alone first — Vault init/unseal is sensitive to API server load |
+| 0 | `external-secrets`, `crossplane`, `keycloak`, all others (default) | Core infra after Vault is stable |
+| 1 | `monitoring-stack`, `crossplane-providers`, `eso-vault-store` | Heavy charts (3 Helm releases) and CRD dependencies — after wave 0 |
 | 2 | `crossplane-devops-aws-config`, `monitoring-base`, `argocd-keycloak-oidc`, `vault-webapp`, `nginx-hpa` | Need ClusterSecretStore (wave 1) to sync credentials |
 | 3 | `crossplane-devops-aws` (AppSet) | ProviderConfig + credentials must be healthy (wave 2) before AWS resources deploy |
 
