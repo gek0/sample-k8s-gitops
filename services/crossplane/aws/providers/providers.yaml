@@ -2,8 +2,6 @@ apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
   name: upbound-provider-family-aws
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
 spec:
   package: xpkg.upbound.io/upbound/provider-family-aws:v2.9.1 # check https://marketplace.upbound.io/providers/upbound/provider-family-aws
 ---
@@ -11,8 +9,6 @@ apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
   name: upbound-provider-aws-s3
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
 spec:
   package: xpkg.upbound.io/upbound/provider-aws-s3:v2.9.1 # check https://marketplace.upbound.io/providers/upbound/provider-aws-s3
 ---
@@ -20,7 +16,5 @@ apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
   name: upbound-provider-aws-vpc
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
 spec:
   package: xpkg.upbound.io/upbound/provider-aws-ec2:v2.9.1 # check https://marketplace.upbound.io/providers/upbound/provider-aws-ec2

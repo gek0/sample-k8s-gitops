@@ -9,13 +9,10 @@ metadata:
     - resources-finalizer.argocd.argoproj.io/foreground
 spec:
   project: cluster-ops
-  sources:
-    - repoURL: 'https://charts.crossplane.io/stable'
-      chart: crossplane
-      targetRevision: '2.4.2' # check https://github.com/crossplane/crossplane/releases
-    - repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
-      targetRevision: HEAD
-      path: services/crossplane/aws/providers
+  source:
+    repoURL: 'https://charts.crossplane.io/stable'
+    chart: crossplane
+    targetRevision: '2.4.2' # check https://github.com/crossplane/crossplane/releases
   destination:
     server: https://kubernetes.default.svc
     namespace: crossplane-system
@@ -26,3 +23,28 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: crossplane-providers
+  namespace: argocd
+  labels:
+    tier: infra
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/foreground
+spec:
+  project: cluster-ops
+  source:
+    repoURL: 'https://github.com/gek0/sample-k8s-gitops.git'
+    targetRevision: HEAD
+    path: services/crossplane/aws/providers
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: crossplane-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false
